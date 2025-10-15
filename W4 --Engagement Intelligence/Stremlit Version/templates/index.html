@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EduMind AI — Engagement Analyzer</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f7f7f7;
+        }
+        h1 {
+            color: #800000;
+            margin-top: 10px;
+            border-bottom: 4px solid #800000;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+        .video-frame {
+            border: 4px solid #800000;
+            border-radius: 8px;
+            width: 720px;
+            height: 480px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px #aaa;
+        }
+        button {
+            background-color: #800000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #stats {
+            font-size: 18px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>EduMind AI — Engagement Analyzer</h1>
+    <div>
+        <button onclick="start()">▶ Start</button>
+        <button onclick="stop()">⏹ Stop</button>
+    </div>
+
+    <div id="video-container"></div>
+
+    <div id="stats">Attention: 0% | Time: 0s</div>
+
+    <script>
+        let videoElement = null;
+
+        async function start() {
+            await fetch('/start');
+            // Show the video feed
+            const container = document.getElementById("video-container");
+            container.innerHTML = '<img src="/video" class="video-frame" id="video">';
+        }
+
+        async function stop() {
+            await fetch('/stop');
+            // Remove the video feed
+            const container = document.getElementById("video-container");
+            container.innerHTML = '';
+        }
+
+        // Update attention % and timer every second
+        setInterval(async () => {
+            const res = await fetch('/status');
+            const data = await res.json();
+            document.getElementById("stats").innerText =
+                `Attention: ${data.attention}% | Time: ${data.time}s`;
+        }, 1000);
+    </script>
+</body>
+</html>
