@@ -1,0 +1,8 @@
+{
+  "name": "emotion-tracker-root",
+  "private": true,
+  "workspaces": ["frontend"],
+  "scripts": {
+    "start": "npm --prefix frontend run dev"
+  }
+}
